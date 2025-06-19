@@ -9,16 +9,20 @@
   </style>
 </head>
 <body>
-  <h2>아래 코드를 복사하세요:</h2>
-  <input type="text" id="code" readonly style="font-size: 1.2em; padding: 5px;">
-  <br><br>
+  <h2>아래 QR 코드를 스캔하세요</h2>
+  <p id="text"></p>
   <img id="qr" src="" alt="QR Code" width="200">
 
   <script>
     const params = new URLSearchParams(window.location.search);
-    const code = params.get("code") || "값이 없습니다";
-    document.getElementById("code").value = code;
-    document.getElementById("qr").src = "https://chart.googleapis.com/chart?chs=200x200&cht=qr&chl=" + encodeURIComponent(code);
+    const code = params.get("code");
+
+    if (code) {
+      document.getElementById("text").textContent = decodeURIComponent(code);
+      document.getElementById("qr").src = "https://chart.googleapis.com/chart?chs=200x200&cht=qr&chl=" + encodeURIComponent(code);
+    } else {
+      document.getElementById("text").textContent = "코드가 없습니다.";
+    }
   </script>
 </body>
 </html>
