@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <title>텍스트 자동 복사</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      text-align: center;
+      padding: 100px 20px;
+    }
+    .copied {
+      color: green;
+      margin-top: 20px;
+    }
+    #text {
+      font-size: 20px;
+      margin-top: 10px;
+      word-break: break-word;
+    }
+  </style>
+</head>
+<body>
+  <h2>텍스트 복사하기</h2>
+  <p id="text">로딩 중...</p>
+  <div class="copied" id="status"></div>
+
+  <script>
+    const params = new URLSearchParams(window.location.search);
+    const text = params.get('text') || '';
+    document.getElementById('text').innerText = text;
+
+    if (text) {
+      navigator.clipboard.writeText(text)
+        .then(() => {
+          document.getElementById('status').innerText = '📋 복사되었습니다!';
+        })
+        .catch(err => {
+          document.getElementById('status').innerText = '❗ 복사 실패: ' + err;
+        });
+    } else {
+      document.getElementById('status').innerText = '❗ 복사할 텍스트가 없습니다.';
+    }
+  </script>
+</body>
+</html>
