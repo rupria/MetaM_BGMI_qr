@@ -1,45 +1,26 @@
 <!DOCTYPE html>
-<html lang="ko">
+<html>
 <head>
-  <meta charset="UTF-8" />
-  <title>텍스트 자동 복사</title>
-  <style>
-    body {
-      font-family: sans-serif;
-      text-align: center;
-      padding: 100px 20px;
-    }
-    .copied {
-      color: green;
-      margin-top: 20px;
-    }
-    #text {
-      font-size: 20px;
-      margin-top: 10px;
-      word-break: break-word;
-    }
-  </style>
+  <meta charset="UTF-8">
+  <title>QR 코드 리더</title>
 </head>
 <body>
-  <h2>텍스트 복사하기</h2>
-  <p id="text">로딩 중...</p>
-  <div class="copied" id="status"></div>
+  <h1>QR 코드 파라미터:</h1>
+  <p id="output"></p>
+
+  <h2>QR 코드 이미지:</h2>
+  <img id="qr" alt="QR Code" />
 
   <script>
     const params = new URLSearchParams(window.location.search);
-    const text = params.get('text') || '';
-    document.getElementById('text').innerText = text;
+    const text = params.get("text");
+    const decoded = text ? decodeURIComponent(text) : "값이 없습니다.";
+
+    document.getElementById("output").textContent = decoded;
 
     if (text) {
-      navigator.clipboard.writeText(text)
-        .then(() => {
-          document.getElementById('status').innerText = '📋 복사되었습니다!';
-        })
-        .catch(err => {
-          document.getElementById('status').innerText = '❗ 복사 실패: ' + err;
-        });
-    } else {
-      document.getElementById('status').innerText = '❗ 복사할 텍스트가 없습니다.';
+      const qrUrl = "https://chart.googleapis.com/chart?chs=200x200&cht=qr&chl=" + encodeURIComponent(window.location.href);
+      document.getElementById("qr").src = qrUrl;
     }
   </script>
 </body>
