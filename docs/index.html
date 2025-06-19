@@ -2,26 +2,30 @@
 <html lang="ko">
 <head>
   <meta charset="UTF-8">
-  <title>QR 코드 페이지</title>
+  <title>QR 코드 복사</title>
   <style>
     body { font-family: sans-serif; text-align: center; padding-top: 50px; }
-    img { margin-top: 20px; }
+    input { font-size: 1.2em; padding: 10px; width: 80%; max-width: 400px; }
+    button { font-size: 1em; padding: 10px 20px; margin-top: 10px; }
   </style>
 </head>
 <body>
-  <h2>아래 QR 코드를 스캔하세요</h2>
-  <p id="text"></p>
-  <img id="qr" src="" alt="QR Code" width="200">
+  <h2>아래 코드를 복사하세요</h2>
+  <input type="text" id="code" readonly>
+  <br>
+  <button onclick="copyCode()">복사하기</button>
 
   <script>
     const params = new URLSearchParams(window.location.search);
-    const code = params.get("code");
+    const code = params.get("code") || "값이 없습니다";
+    document.getElementById("code").value = decodeURIComponent(code);
 
-    if (code) {
-      document.getElementById("text").textContent = decodeURIComponent(code);
-      document.getElementById("qr").src = "https://chart.googleapis.com/chart?chs=200x200&cht=qr&chl=" + encodeURIComponent(code);
-    } else {
-      document.getElementById("text").textContent = "코드가 없습니다.";
+    function copyCode() {
+      const input = document.getElementById("code");
+      input.select();
+      input.setSelectionRange(0, 99999); // 모바일 대응
+      document.execCommand("copy");
+      alert("복사되었습니다!");
     }
   </script>
 </body>
