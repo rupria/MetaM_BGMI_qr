@@ -1,8 +1,43 @@
 <!DOCTYPE html>
 <html>
-<head><title>QR Generator</title></head>
+<head>
+  <meta charset="UTF-8">
+  <title>QR 텍스트 보기</title>
+  <style>
+    body { font-family: sans-serif; padding: 2em; }
+    #text-box {
+      padding: 1em;
+      border: 1px solid #ccc;
+      background: #f9f9f9;
+      font-size: 1.2em;
+      word-break: break-word;
+    }
+    button {
+      margin-top: 1em;
+      padding: 0.5em 1em;
+      font-size: 1em;
+    }
+  </style>
+</head>
 <body>
-  <h1>Welcome to QR Generator</h1>
-  <p>This page could display a generated QR code.</p>
+  <h1>QR 코드로 전달된 텍스트</h1>
+  <div id="text-box">값을 불러오는 중...</div>
+  <button onclick="copyText()">텍스트 복사하기</button>
+
+  <script>
+    const params = new URLSearchParams(window.location.search);
+    const text = params.get("text") || "값이 없습니다.";
+    const decoded = decodeURIComponent(text);
+    const box = document.getElementById("text-box");
+    box.textContent = decoded;
+
+    function copyText() {
+      navigator.clipboard.writeText(decoded).then(() => {
+        alert("텍스트가 복사되었습니다!");
+      }).catch(() => {
+        alert("복사에 실패했습니다. 길게 눌러서 복사해 주세요.");
+      });
+    }
+  </script>
 </body>
 </html>
