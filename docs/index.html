@@ -1,42 +1,21 @@
+<!-- example.html -->
 <!DOCTYPE html>
-<html>
+<html lang="ko">
 <head>
   <meta charset="UTF-8">
-  <title>QR 텍스트 보기</title>
-  <style>
-    body { font-family: sans-serif; padding: 2em; }
-    #text-box {
-      padding: 1em;
-      border: 1px solid #ccc;
-      background: #f9f9f9;
-      font-size: 1.2em;
-      word-break: break-word;
-    }
-    button {
-      margin-top: 1em;
-      padding: 0.5em 1em;
-      font-size: 1em;
-    }
-  </style>
+  <title>복사 가능한 코드</title>
 </head>
 <body>
-  <h1>QR 코드로 전달된 텍스트</h1>
-  <div id="text-box">값을 불러오는 중...</div>
-  <button onclick="copyText()">텍스트 복사하기</button>
+  <h2>아래 코드를 복사하세요:</h2>
+  <input type="text" value="여기에 C30 값" id="code" readonly>
+  <button onclick="copyCode()">복사</button>
 
   <script>
-    const params = new URLSearchParams(window.location.search);
-    const text = params.get("text") || "값이 없습니다.";
-    const decoded = decodeURIComponent(text);
-    const box = document.getElementById("text-box");
-    box.textContent = decoded;
-
-    function copyText() {
-      navigator.clipboard.writeText(decoded).then(() => {
-        alert("텍스트가 복사되었습니다!");
-      }).catch(() => {
-        alert("복사에 실패했습니다. 길게 눌러서 복사해 주세요.");
-      });
+    function copyCode() {
+      const input = document.getElementById("code");
+      input.select();
+      document.execCommand("copy");
+      alert("복사되었습니다!");
     }
   </script>
 </body>
