@@ -23,9 +23,11 @@
     const code = params.get("code");
 
     if (code) {
-      const decoded = decodeURIComponent(code);
+      const decoded = decodeURIComponent(code).trim();
       document.getElementById("code").value = decoded;
-      document.getElementById("qr").src = "https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=" + encodeURIComponent(decoded);
+
+      const qrData = "https://rupria.github.io/MetaM_BGMI_qr/?code=" + encodeURIComponent(decoded);
+      document.getElementById("qr").src = "https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=" + encodeURIComponent(qrData);
     } else {
       document.getElementById("code").value = "코드가 없습니다.";
     }
