@@ -45,7 +45,6 @@
   <script>
     const params = new URLSearchParams(window.location.search);
     const code = params.get("code");
-    const baseUrl = "https://rupria.github.io/MetaM_BGMI_qr/?code=";
     const outputEl = document.getElementById("output");
     const statusEl = document.getElementById("status");
     const copyBtn = document.getElementById("copyBtn");
@@ -58,14 +57,11 @@
       outputEl.innerText = code;
       copyBtn.style.display = "inline-block";
 
-      // ✅ 이중 인코딩된 QR URL 생성
-      const encodedCode = encodeURIComponent(code);
-      const fullUrl = baseUrl + encodedCode;
-      const qrUrl = "https://chart.googleapis.com/chart?chs=200x200&cht=qr&chl=" + encodeURIComponent(fullUrl);
+      // ✅ 현재 페이지 주소를 그대로 QR로 생성
+      const qrUrl = "https://chart.googleapis.com/chart?chs=200x200&cht=qr&chl=" + encodeURIComponent(window.location.href);
       qrImg.src = qrUrl;
-      console.log("QR 이미지 주소:", qrUrl);
+      console.log("QR 링크 →", qrUrl);
 
-      // 📋 복사 기능
       copyBtn.onclick = () => {
         navigator.clipboard.writeText(code)
           .then(() => {
