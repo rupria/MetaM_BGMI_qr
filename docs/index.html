@@ -1,81 +1,41 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-  <meta charset="UTF-8" />
-  <title>BGMI 명령어 복사</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta charset="UTF-8">
+  <title>QR 코드 복사</title>
   <style>
-    body {
-      font-family: sans-serif;
-      padding: 2rem;
-      text-align: center;
-      background-color: #f8f9fa;
-    }
-    .code-box {
-      margin-top: 1.5rem;
-      background: #fff;
-      padding: 1rem;
-      border-radius: 8px;
-      box-shadow: 0 0 5px rgba(0,0,0,0.1);
-      word-break: break-word;
-      font-size: 1.1rem;
-    }
-    .status {
-      margin-top: 1rem;
-      font-size: 1rem;
-    }
-    .qr {
-      margin-top: 2rem;
-    }
-    .qr img {
-      margin-top: 1rem;
-    }
+    body { font-family: sans-serif; text-align: center; padding-top: 50px; }
+    input { font-size: 1.2em; padding: 10px; width: 80%; max-width: 400px; }
+    button { font-size: 1em; padding: 10px 20px; margin-top: 10px; }
+    img { margin-top: 20px; }
   </style>
 </head>
 <body>
-  <h2>📋 명령어 복사 페이지</h2>
-  <div id="output" class="code-box">로딩 중...</div>
-  <button id="copyBtn" style="display: none;">📋 복사하기</button>
-  <div id="status" class="status"></div>
-  <div class="qr">
-    <p>📱 이 명령어 링크 QR</p>
-    <img id="qrImg" src="" alt="QR Code" />
-  </div>
+  <h2>아래 코드를 복사하거나 QR을 스캔하세요</h2>
+  <input type="text" id="code" readonly>
+  <br>
+  <button onclick="copyCode()">복사하기</button>
+  <br>
+  <img id="qr" src="" alt="QR Code" width="200">
 
   <script>
     const params = new URLSearchParams(window.location.search);
     const code = params.get("code");
-    const outputEl = document.getElementById("output");
-    const statusEl = document.getElementById("status");
-    const copyBtn = document.getElementById("copyBtn");
-    const qrImg = document.getElementById("qrImg");
 
-    if (!code) {
-      outputEl.innerText = "❗ 명령어 코드가 존재하지 않습니다.";
-      statusEl.style.color = "red";
+    if (code) {
+      const decoded = decodeURIComponent(code);
+      document.getElementById("code").value = decoded;
+      document.getElementById("qr").src = "https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=" + encodeURIComponent(decoded);
     } else {
-      outputEl.innerText = code;
-      copyBtn.style.display = "inline-block";
+      document.getElementById("code").value = "코드가 없습니다.";
+    }
 
-      // ✅ 공백 포함 명령어를 안전하게 처리하는 QR 생성
-      const encodedCode = encodeURIComponent(code); // 공백 → %20
-      const fullUrl = "https://rupria.github.io/MetaM_BGMI_qr/?code=" + encodedCode;
-      const qrUrl = "https://chart.googleapis.com/chart?chs=200x200&cht=qr&chl=" + encodeURIComponent(fullUrl);
-      qrImg.src = qrUrl;
-      console.log("QR 링크 →", qrUrl);
-
-      copyBtn.onclick = () => {
-        navigator.clipboard.writeText(code)
-          .then(() => {
-            statusEl.innerText = "✅ 복사되었습니다!";
-            statusEl.style.color = "green";
-          })
-          .catch(err => {
-            statusEl.innerText = "❗ 복사 실패. 수동 복사해 주세요.";
-            statusEl.style.color = "red";
-            console.error("복사 실패:", err);
-          });
-      };
+    function copyCode() {
+      const input = document.getElementById("code");
+      input.select();
+      input.setSelectionRange(0, 99999);
+      document.execCommand("copy");
+      alert("복사되었습니다!");
     }
   </script>
 </body>
