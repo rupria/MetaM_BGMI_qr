@@ -54,10 +54,12 @@
     } else {
       outputEl.innerText = code;
       copyBtn.style.display = "inline-block";
-      qrImg.src = "https://chart.googleapis.com/chart?chs=200x200&cht=qr&chl=" + encodeURIComponent(baseUrl + code);
-      qrImg.src = "https://chart.googleapis.com/chart?chs=200x200&cht=qr&chl=" + encodeURIComponent(baseUrl + code);
-console.log("QR 이미지 주소:", qrImg.src); // ← 추가
 
+      // ✅ QR 주소 생성 (code → URL-safe → 전체 URL 다시 URL-safe 처리)
+      const encodedCode = encodeURIComponent(code);
+      const fullUrl = baseUrl + encodedCode;
+      qrImg.src = "https://chart.googleapis.com/chart?chs=200x200&cht=qr&chl=" + encodeURIComponent(fullUrl);
+      console.log("QR 이미지 주소:", qrImg.src);
 
       copyBtn.onclick = () => {
         navigator.clipboard.writeText(code)
