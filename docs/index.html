@@ -57,8 +57,9 @@
       outputEl.innerText = code;
       copyBtn.style.display = "inline-block";
 
-      // ✅ 현재 페이지 주소를 그대로 QR로 생성
-      const qrUrl = "https://chart.googleapis.com/chart?chs=200x200&cht=qr&chl=" + encodeURIComponent(window.location.href);
+      // ✅ 한 번만 인코딩된 URL을 QR 코드로 생성
+      const simpleUrl = "https://rupria.github.io/MetaM_BGMI_qr/?code=" + encodeURIComponent(code);
+      const qrUrl = "https://chart.googleapis.com/chart?chs=200x200&cht=qr&chl=" + encodeURIComponent(simpleUrl);
       qrImg.src = qrUrl;
       console.log("QR 링크 →", qrUrl);
 
