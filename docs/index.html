@@ -55,6 +55,9 @@
       outputEl.innerText = code;
       copyBtn.style.display = "inline-block";
       qrImg.src = "https://chart.googleapis.com/chart?chs=200x200&cht=qr&chl=" + encodeURIComponent(baseUrl + code);
+      qrImg.src = "https://chart.googleapis.com/chart?chs=200x200&cht=qr&chl=" + encodeURIComponent(baseUrl + code);
+console.log("QR 이미지 주소:", qrImg.src); // ← 추가
+
 
       copyBtn.onclick = () => {
         navigator.clipboard.writeText(code)
