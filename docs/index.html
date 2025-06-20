@@ -1,41 +1,59 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-  <meta charset="UTF-8">
-  <title>QR 코드 복사</title>
+  <meta charset="UTF-8" />
+  <title>BGMI 명령어 복사</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <style>
-    body { font-family: sans-serif; text-align: center; padding-top: 50px; }
-    input { font-size: 1.2em; padding: 10px; width: 80%; max-width: 400px; }
-    button { font-size: 1em; padding: 10px 20px; margin-top: 10px; }
-    img { margin-top: 20px; }
+    body {
+      font-family: sans-serif;
+      padding: 2rem;
+      text-align: center;
+      background-color: #f7f7f7;
+    }
+    .code-box {
+      margin-top: 1.5rem;
+      background: #fff;
+      padding: 1rem;
+      border-radius: 8px;
+      box-shadow: 0 0 5px rgba(0,0,0,0.1);
+      word-break: break-word;
+      font-size: 1.1rem;
+    }
+    .status {
+      margin-top: 1rem;
+      font-size: 1rem;
+      color: #4caf50;
+    }
   </style>
 </head>
 <body>
-  <h2>아래 코드를 복사하거나 QR을 스캔하세요</h2>
-  <input type="text" id="code" readonly>
-  <br>
-  <button onclick="copyCode()">복사하기</button>
-  <br>
-  <img id="qr" src="" alt="QR Code" width="200">
+  <h2>📋 명령어 복사 페이지</h2>
+  <div id="output" class="code-box">로딩 중...</div>
+  <div id="status" class="status"></div>
 
   <script>
     const params = new URLSearchParams(window.location.search);
     const code = params.get("code");
 
-    if (code) {
-      const decoded = decodeURIComponent(code);
-      document.getElementById("code").value = decoded;
-      document.getElementById("qr").src = "https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=" + encodeURIComponent(decoded);
-    } else {
-      document.getElementById("code").value = "코드가 없습니다.";
-    }
+    const outputEl = document.getElementById("output");
+    const statusEl = document.getElementById("status");
 
-    function copyCode() {
-      const input = document.getElementById("code");
-      input.select();
-      input.setSelectionRange(0, 99999);
-      document.execCommand("copy");
-      alert("복사되었습니다!");
+    if (!code) {
+      outputEl.innerText = "❗ 명령어 코드가 존재하지 않습니다.";
+      outputEl.style.color = "red";
+    } else {
+      outputEl.innerText = code;
+
+      // 클립보드 자동 복사
+      navigator.clipboard.writeText(code)
+        .then(() => {
+          statusEl.innerText = "✅ 명령어가 클립보드에 복사되었습니다!";
+        })
+        .catch(() => {
+          statusEl.innerText = "❗ 자동 복사에 실패했습니다. 아래 명령어를 수동으로 복사해 주세요.";
+          statusEl.style.color = "red";
+        });
     }
   </script>
 </body>
