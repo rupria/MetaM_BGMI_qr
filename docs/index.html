@@ -23,7 +23,6 @@
     .status {
       margin-top: 1rem;
       font-size: 1rem;
-      color: red;
     }
     button {
       margin-top: 1rem;
@@ -49,32 +48,23 @@
 
     if (!code) {
       outputEl.innerText = "❗ 명령어 코드가 존재하지 않습니다.";
+      statusEl.style.color = "red";
     } else {
       outputEl.innerText = code;
       copyBtn.style.display = "inline-block";
 
-      // 자동 복사 시도
-      navigator.clipboard.writeText(code)
-        .then(() => {
-          statusEl.innerText = "✅ 명령어가 자동으로 복사되었습니다!";
-          statusEl.style.color = "green";
-        })
-        .catch(err => {
-          console.warn("자동 복사 실패:", err);
-          statusEl.innerText = "❗ 자동 복사에 실패했습니다. 아래 버튼을 눌러 복사해 주세요.";
-          copyBtn.onclick = () => {
-            navigator.clipboard.writeText(code)
-              .then(() => {
-                statusEl.innerText = "✅ 복사되었습니다!";
-                statusEl.style.color = "green";
-              })
-              .catch(err2 => {
-                console.error("복사 버튼도 실패:", err2);
-                statusEl.innerText = "❗ 복사 실패. 텍스트를 수동으로 복사해 주세요.";
-                statusEl.style.color = "red";
-              });
-          };
-        });
+      copyBtn.onclick = () => {
+        navigator.clipboard.writeText(code)
+          .then(() => {
+            statusEl.innerText = "✅ 복사되었습니다!";
+            statusEl.style.color = "green";
+          })
+          .catch(err => {
+            statusEl.innerText = "❗ 복사에 실패했습니다. 텍스트를 수동으로 복사해 주세요.";
+            statusEl.style.color = "red";
+            console.error("복사 실패:", err);
+          });
+      };
     }
   </script>
 </body>
