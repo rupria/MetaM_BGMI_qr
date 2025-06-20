@@ -24,12 +24,8 @@
       margin-top: 1rem;
       font-size: 1rem;
     }
-    button {
-      margin-top: 1rem;
-      padding: 0.6rem 1.2rem;
-      font-size: 1rem;
-      border-radius: 6px;
-      cursor: pointer;
+    .qr {
+      margin-top: 2rem;
     }
   </style>
 </head>
@@ -38,13 +34,19 @@
   <div id="output" class="code-box">로딩 중...</div>
   <button id="copyBtn" style="display: none;">📋 복사하기</button>
   <div id="status" class="status"></div>
+  <div class="qr">
+    <p style="margin-top:2rem;">📱 이 명령어 링크 QR</p>
+    <img id="qrImg" src="" alt="QR Code" />
+  </div>
 
   <script>
     const params = new URLSearchParams(window.location.search);
     const code = params.get("code");
+    const baseUrl = "https://rupria.github.io/MetaM_BGMI_qr/?code=";
     const outputEl = document.getElementById("output");
     const statusEl = document.getElementById("status");
     const copyBtn = document.getElementById("copyBtn");
+    const qrImg = document.getElementById("qrImg");
 
     if (!code) {
       outputEl.innerText = "❗ 명령어 코드가 존재하지 않습니다.";
@@ -52,6 +54,7 @@
     } else {
       outputEl.innerText = code;
       copyBtn.style.display = "inline-block";
+      qrImg.src = "https://chart.googleapis.com/chart?chs=200x200&cht=qr&chl=" + encodeURIComponent(baseUrl + code);
 
       copyBtn.onclick = () => {
         navigator.clipboard.writeText(code)
@@ -60,7 +63,7 @@
             statusEl.style.color = "green";
           })
           .catch(err => {
-            statusEl.innerText = "❗ 복사에 실패했습니다. 텍스트를 수동으로 복사해 주세요.";
+            statusEl.innerText = "❗ 복사 실패. 수동 복사해 주세요.";
             statusEl.style.color = "red";
             console.error("복사 실패:", err);
           });
