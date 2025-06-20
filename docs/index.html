@@ -27,6 +27,9 @@
     .qr {
       margin-top: 2rem;
     }
+    .qr img {
+      margin-top: 1rem;
+    }
   </style>
 </head>
 <body>
@@ -35,7 +38,7 @@
   <button id="copyBtn" style="display: none;">📋 복사하기</button>
   <div id="status" class="status"></div>
   <div class="qr">
-    <p style="margin-top:2rem;">📱 이 명령어 링크 QR</p>
+    <p>📱 이 명령어 링크 QR</p>
     <img id="qrImg" src="" alt="QR Code" />
   </div>
 
@@ -55,12 +58,14 @@
       outputEl.innerText = code;
       copyBtn.style.display = "inline-block";
 
-      // ✅ QR 주소 생성 (code → URL-safe → 전체 URL 다시 URL-safe 처리)
+      // ✅ 이중 인코딩된 QR URL 생성
       const encodedCode = encodeURIComponent(code);
       const fullUrl = baseUrl + encodedCode;
-      qrImg.src = "https://chart.googleapis.com/chart?chs=200x200&cht=qr&chl=" + encodeURIComponent(fullUrl);
-      console.log("QR 이미지 주소:", qrImg.src);
+      const qrUrl = "https://chart.googleapis.com/chart?chs=200x200&cht=qr&chl=" + encodeURIComponent(fullUrl);
+      qrImg.src = qrUrl;
+      console.log("QR 이미지 주소:", qrUrl);
 
+      // 📋 복사 기능
       copyBtn.onclick = () => {
         navigator.clipboard.writeText(code)
           .then(() => {
